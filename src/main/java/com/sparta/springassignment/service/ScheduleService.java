@@ -4,6 +4,8 @@ import com.sparta.springassignment.dto.ScheduleDto;
 import com.sparta.springassignment.entity.Schedule;
 import com.sparta.springassignment.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,5 +62,11 @@ public class ScheduleService {
         dto.setCreatedAt(schedule.getCreatedAt());
         dto.setUpdatedAt(schedule.getUpdatedAt());
         return dto;
+    }
+
+    // 페이징된 일정 조회 메서드
+    public Page<ScheduleDto> getSchedules(Pageable pageable) {
+        return scheduleRepository.findAll(pageable)
+                .map(this::convertToDto);
     }
 }

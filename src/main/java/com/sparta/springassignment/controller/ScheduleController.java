@@ -3,6 +3,10 @@ package com.sparta.springassignment.controller;
 import com.sparta.springassignment.dto.ScheduleDto;
 import com.sparta.springassignment.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,5 +42,17 @@ public class ScheduleController {
         ScheduleDto updatedSchedule = scheduleService.updateSchedule(id, scheduleDto);
 
         return ResponseEntity.ok(updatedSchedule);
+    }
+
+    // 3단계: 페이징된 일정 조회 API
+    @GetMapping
+    public ResponseEntity<Page<ScheduleDto>> getSchedules(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<ScheduleDto> schedulePage = scheduleService.getSchedules(pageable);
+
+        return ResponseEntity.ok(schedulePage);
     }
 }
