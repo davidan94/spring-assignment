@@ -33,25 +33,20 @@ public class ScheduleService {
     // 일정 단건 조회 메서드
     @Transactional(readOnly = true)
     public ScheduleDto getSchedule(Long id) {
-        // ID로 일정 조회
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid schedule ID: " + id));
 
-        // 조회된 엔티티를 DTO로 변환하여 반환
         return convertToDto(schedule);
     }
 
     // 일정 수정 메서드
     @Transactional
     public ScheduleDto updateSchedule(Long id, ScheduleDto scheduleDto) {
-        // ID로 일정 조회
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid schedule ID: " + id));
 
-        // 일정 정보 업데이트
         schedule.updateSchedule(scheduleDto.getTitle(), scheduleDto.getContent());
 
-        // 수정된 엔티티를 DTO로 변환하여 반환
         return convertToDto(schedule);
     }
 
