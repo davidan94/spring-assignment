@@ -55,4 +55,12 @@ public class ScheduleController {
 
         return ResponseEntity.ok(schedulePage);
     }
+
+    // 4단계: 일정 삭제 API
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id) {
+        scheduleService.deleteSchedule(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }

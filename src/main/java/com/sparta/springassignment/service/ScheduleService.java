@@ -36,7 +36,7 @@ public class ScheduleService {
     @Transactional(readOnly = true)
     public ScheduleDto getSchedule(Long id) {
         Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid schedule ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 스케줄 ID: " + id));
 
         return convertToDto(schedule);
     }
@@ -45,7 +45,7 @@ public class ScheduleService {
     @Transactional
     public ScheduleDto updateSchedule(Long id, ScheduleDto scheduleDto) {
         Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid schedule ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 스케줄 ID: " + id));
 
         schedule.updateSchedule(scheduleDto.getTitle(), scheduleDto.getContent());
 
@@ -68,5 +68,14 @@ public class ScheduleService {
     public Page<ScheduleDto> getSchedules(Pageable pageable) {
         return scheduleRepository.findAll(pageable)
                 .map(this::convertToDto);
+    }
+
+    // 일정 삭제 메서드
+    @Transactional
+    public void deleteSchedule(Long id) {
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 스케줄 ID: " + id));
+
+        scheduleRepository.delete(schedule);
     }
 }
